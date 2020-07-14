@@ -1,0 +1,48 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.enterstock {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.symbol {
+    padding-top: 10px;
+    font-size: 2em;
+}
+
+.title {
+    font-size: 2.5em;
+    text-align: center;
+    text-transform: uppercase;
+    margin-top: 20px;
+}
+
+.inputfields {
+    transform: translateY(50%);
+    
+    
+}
+
+.symfields,
+.btn {
+    height: 35px;
+    width: 350px;
+    transform: translateY(500%);
+    border: blueviolet solid 2px;
+}
+
+.btn {
+    margin-top: 10px;
+    background: rgb(134, 39, 146);
+    text-transform: uppercase;
+    border: none;
+}
