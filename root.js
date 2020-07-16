@@ -7,6 +7,7 @@ class Stocks extends React.Component {
         this.state = {
             userInput: '',
             stockSymbol: [],
+            open: [],
             isLoaded: false
         }
     }
@@ -24,28 +25,50 @@ class Stocks extends React.Component {
     }
 
     componentDidMount() {
-        fetch(`https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`)
-            .then(res => res.json())
-            .then(
-                (results) => {
-                    this.setState({
-                        isLoaded: true,
-                        stockSymbol: results
-                    });
-                    console.log(results[0])
-                },
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                }
-            )
+
+        const urls = [
+            `https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`,
+            `https://finnhub.io/api/v1/quote?symbol=AAPL&token=${key}`,
+            `https://finnhub.io/api/v1/scan/support-resistance?symbol=IBM&resolution=30&token=${key}`,
+            `https://api.iextrading.com/1.0/tops?symbols=IBM`
+        ]
+
+        let requests = urls.map(url => fetch(url))
+        Promise.all(requests)
+            .then(responses => {
+                return Promise.all(responses.map(response => response.json()));
+            }).then(responses => {
+                this.setState({
+                    stockSymbol: responses[0],
+                    open: responses[1]
+                })
+                console.log(this.state.stockSymbol)
+                console.log(this.state.open)
+            })
+
+
+
+        // fetch(`https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`)
+        //     .then(res => res.json())
+        //     .then(
+        //         (results) => {
+        //             this.setState({
+        //                 isLoaded: true,
+        //                 stockSymbol: results
+        //             });
+        //         },
+        //         (error) => {
+        //             this.setState({
+        //                 isLoaded: true,
+        //                 error
+        //             });
+        //         }
+        //     )
     }
 
 
     render() {
-        const { stockSymbol, userInput } = this.state
+        const { stockSymbol, userInput, open } = this.state
 
 
 
@@ -58,9 +81,12 @@ class Stocks extends React.Component {
                 </form>
                 {stockSymbol.map((stock, i) => {
                     if (userInput === stock.symbol) {
-                        return <h2 className="symboldescription" key={i}>
-                            {stock.description}
-                        </h2>
+                        return (
+                            <ul className="symboldescription" key={i}>
+                                <li key={i}>{stock.description}</li>
+                                <li key={i}>{open.c}</li>
+                            </ul>
+                        )
                     }
                 })}
             </div>
