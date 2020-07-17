@@ -1,5 +1,25 @@
 const key = 'brjo6knrh5r9g3ot7150';
 
+const currentSymbol = fetch(`https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`)
+    .then(res => {
+        return res.json()
+    })
+    .then(results => {
+        return results.map(result => {
+            return result
+        })
+    })
+
+console.log(currentSymbol)
+
+const urls = [
+    `https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`,
+    `https://finnhub.io/api/v1/quote?symbol=${currentSymbol}US&token=${key}`,
+    `https://finnhub.io/api/v1/scan/support-resistance?symbol=${currentSymbol}&resolution=30&token=${key}`,
+    `https://api.iextrading.com/1.0/tops?symbols=IBM`
+]
+
+
 
 class Stocks extends React.Component {
     constructor(props) {
@@ -8,30 +28,25 @@ class Stocks extends React.Component {
             userInput: '',
             stockSymbol: [],
             open: [],
+            support: [],
+            volume: [],
             isLoaded: false
         }
     }
 
     typeSymbol = (e) => {
         this.setState({
-            userInput: e.target.value.toUpperCase()
+            userInput: e.target.value.toUpperCase(),
         }, (e) => {
             console.log(this.state.userInput)
         })
     }
 
     getSymbol = (e) => {
-        e.preventDefault()
+        console.log(stock)
     }
 
     componentDidMount() {
-
-        const urls = [
-            `https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`,
-            `https://finnhub.io/api/v1/quote?symbol=AAPL&token=${key}`,
-            `https://finnhub.io/api/v1/scan/support-resistance?symbol=IBM&resolution=30&token=${key}`,
-            `https://api.iextrading.com/1.0/tops?symbols=IBM`
-        ]
 
         let requests = urls.map(url => fetch(url))
         Promise.all(requests)
@@ -40,10 +55,15 @@ class Stocks extends React.Component {
             }).then(responses => {
                 this.setState({
                     stockSymbol: responses[0],
-                    open: responses[1]
+                    open: responses[1],
+                    support: responses[2],
+                    volume: responses[3]
                 })
+                console.log(responses)
                 console.log(this.state.stockSymbol)
                 console.log(this.state.open)
+                console.log(this.state.support)
+                console.log(this.state.volume)
             })
 
 
@@ -68,7 +88,7 @@ class Stocks extends React.Component {
 
 
     render() {
-        const { stockSymbol, userInput, open } = this.state
+        const { stockSymbol, userInput, open, support, volume } = this.state
 
 
 
@@ -85,6 +105,8 @@ class Stocks extends React.Component {
                             <ul className="symboldescription" key={i}>
                                 <li key={i}>{stock.description}</li>
                                 <li key={i}>{open.c}</li>
+                                <li key={i}>{support.levels[0]}</li>
+                                <li key={i}>{volume[0].volume}</li>
                             </ul>
                         )
                     }
