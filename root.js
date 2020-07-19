@@ -1,35 +1,39 @@
 const key = 'brjo6knrh5r9g3ot7150';
 
 // const currentSymbol = fetch(`https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`)
+// currentSymbol
 //     .then((res) => {
-//         return res.json()
+//         return res.json();
 //     }).then((results) => {
-//         return results.map(result => {
+//         results.map(result => {
 //             return result
 //         })
 //     })
 
+// console.log(currentSymbol)
 
-function getSymbol() {
-    const httpRequest = new XMLHttpRequest();
-    httpRequest.onload = () => {
-        const symbols = JSON.parse(httpRequest.responseText);
-        for (let i = 0; i < symbols.length; i++) {
-            const currentSymbol = symbols[i]
-        }
-        httpRequest.open('GET', `https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`, true);
-        httpRequest.send();
-    }
+async function getSym() {
+    const currentSymbol = fetch(`https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`)
+        .then((res) => {
+            return res.json();
+        }).then((results) => {
+            results.map(result => {
+                return result
+            })
+        })
+    let symbols = await currentSymbol;
 }
 
-console.log(getSymbol())
+console.log(getSym())
+
+// console.log(getSym())
 
 
 const urls = [
     `https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`,
-    `https://finnhub.io/api/v1/quote?symbol=AUS&token=${key}`,
+    `https://finnhub.io/api/v1/quote?symbol=A&token=${key}`,
     `https://finnhub.io/api/v1/scan/support-resistance?symbol=A&resolution=30&token=${key}`,
-    `https://api.iextrading.com/1.0/tops?symbols=A`
+    `https://api.iextrading.com/1.0/tops?symbols=AAPL`
 ]
 
 
