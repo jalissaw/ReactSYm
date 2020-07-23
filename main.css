@@ -14,11 +14,10 @@
 }
 
 .symbol {
-    padding-top: 10px;
     font-size: 2em;
     -webkit-text-fill-color: transparent;
-    -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: rgb(19, 18, 18);
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: rgb(240, 240, 240);
 }
 
 .title {
@@ -27,7 +26,7 @@
     text-transform: uppercase;
     -webkit-text-fill-color: transparent;
     -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: rgb(10, 10, 10);
+    -webkit-text-stroke-color: white;
 }
 
 .fields {
@@ -36,6 +35,7 @@
     justify-content: center;
     align-items: center;
     grid-row: 1 / 4;
+    background: purple;
 }
 
 .symfields {
@@ -49,15 +49,26 @@
 
 .stockings {
     grid-column: 2 / 4;
+    padding:  25px 50px;
+}
+
+.stocked {
+    text-align: center;
+    text-transform: uppercase;
+    background: black;
+    padding: 5px 0px;
+    margin: 10px 0px;
+    color: white;
+    animation: 0.3s ease-in-out all ;
+    animation-name: fadeLeft;
 }
 
 .symbol {
     font-size: 6em;
+    background: purple;
 }
 .named {
     grid-column: 2 / 4;
-   
-    padding: 20px;
     text-align: center;
     align-items: center;
     animation: 0.3s ease-in-out all ;
@@ -66,11 +77,19 @@
 }
 
 .name {
-    font-size: 4em;
+    font-size: 3.5em;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: purple;
 }
 
 
 @keyframes fade {
     0%{opacity: 0; transform: translateY(20px);}
     100%{opacity: 1; transform: translateY(0px)}
+}
+
+@keyframes fadeLeft {
+    0%{opacity: 0; transform: translateX(20px);}
+    100%{opacity: 1; transform: translateX(0px)}
 }

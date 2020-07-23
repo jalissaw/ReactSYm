@@ -77,7 +77,7 @@ class Stocks extends React.Component {
                         <div className="stockings">
                             <div className="named">
                                 <h2 className="symbol">{this.state.userInput}</h2>
-                                <h2 className="stocked name" key={i}>{stock.name}</h2>
+                                <h2 className=" name" key={i}>{stock.name}</h2>
                             </div>
                             <h2 className="stocked price" key={i}>Price: {foundMarket.lastSalePrice}</h2>
                             <h2 className="stocked bidsize" key={i}>Bid Size: {foundMarket.bidSize}</h2>
