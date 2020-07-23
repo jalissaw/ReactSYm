@@ -1,41 +1,4 @@
-const key = 'brjo6knrh5r9g3ot7150';
 
-const currentSymbol = fetch(`https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`)
-currentSymbol.responseText
-
-console.log(currentSymbol)
-
-async function getSym() {
-    const currentSymbol = fetch(`https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`)
-    await Promise.resolve(currentSymbol)
-        .then((res) => {
-            return res.json();
-        }).then((results) => {
-            results.map(result => {
-                return result
-            })
-        })
-}
-
-console.log(getSym())
-
-// console.log(getSym())
-function displaySymbol() {
-    return fetch(`https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`)
-        .then(res => { return res.json() })
-        .then(data => data.map(res => {
-            return res.displaySymbol
-        }))
-        .catch(err => console.log(err))
-
-}
-console.log(displaySymbol())
-const urls = [
-    `https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`,
-    `https://finnhub.io/api/v1/quote?symbol=${displaySymbol()}&token=${key}`,
-    `https://finnhub.io/api/v1/scan/support-resistance?symbol=A&resolution=30&token=${key}`,
-    `https://api.iextrading.com/1.0/tops?symbols=IBM`
-]
 
 
 
@@ -45,9 +8,7 @@ class Stocks extends React.Component {
         this.state = {
             userInput: '',
             stockSymbol: [],
-            open: [],
-            support: [],
-            volume: [],
+            marketData: [],
             isLoaded: false
         }
     }
@@ -55,16 +16,30 @@ class Stocks extends React.Component {
     typeSymbol = (e) => {
         this.setState({
             userInput: e.target.value.toUpperCase(),
+
         }, (e) => {
             console.log(this.state.userInput)
         })
     }
 
     getSymbol = (e) => {
-        console.log(stock)
+        return fetch(`https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`)
+            .then(res => {
+                return res.json()
+            })
+            .then(data => {
+                data.push(this.state.urlSymbol)
+            }),
+            console.log(this.getSymbol)
     }
 
     componentDidMount() {
+
+        const urls = [
+            `https://api.iextrading.com/1.0/ref-data/symbols`,
+            `https://api.iextrading.com/1.0/tops`
+        ]
+
 
         let requests = urls.map(url => fetch(url))
         Promise.all(requests)
@@ -73,69 +48,51 @@ class Stocks extends React.Component {
             }).then(responses => {
                 this.setState({
                     stockSymbol: responses[0],
-                    open: responses[1],
-                    support: responses[2],
-                    volume: responses[3]
+                    marketData: responses[1]
+
                 })
-                console.log(responses)
-                console.log(this.state.stockSymbol)
-                console.log(this.state.open)
-                console.log(this.state.support)
-                console.log(this.state.volume)
             })
 
-
-
-        // fetch(`https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`)
-        //     .then(res => res.json())
-        //     .then(
-        //         (results) => {
-        //             this.setState({
-        //                 isLoaded: true,
-        //                 stockSymbol: results
-        //             });
-        //         },
-        //         (error) => {
-        //             this.setState({
-        //                 isLoaded: true,
-        //                 error
-        //             });
-        //         }
-        //     )
     }
 
 
     render() {
-        const { stockSymbol, userInput, open, support, volume } = this.state
+        const { stockSymbol, userInput, marketData } = this.state;
 
-
+        const filteredSymbols = stockSymbol.filter(
+            (sym) => sym.symbol === userInput
+        );
+        const foundMarket = marketData.find(
+            (market) => market.symbol === userInput
+        );
 
         return (
             <div className="enterstock">
-                <h1 className="title">Enter Stock Symbol</h1>
-                <span className="symbol">{this.state.userInput}</span>
-                <form className="inputfields" onSubmit={this.getSymbol}>
-                    <input type="text" className="symfields" name="symbolname" onChange={this.typeSymbol}></input>
-                </form>
-                {stockSymbol.map((stock, i) => {
-                    if (userInput === stock.symbol) {
-                        return (
-                            <ul className="symboldescription" key={i}>
-                                <li key={i}>{stock.description}</li>
-                                <li key={i}>{open.c}</li>
-                                <li key={i}>{support.levels[0]}</li>
-                                <li key={i}>{volume[0].volume}</li>
-                            </ul>
-                        )
-                    }
+                <div className="fields">
+                    <h1 className="title">Enter Stock Symbol</h1>
+                    <input type="text" className="symfields" name="symbolname" onChange={this.typeSymbol} />
+                </div>
+                {filteredSymbols.map((stock, i) => {
+                    return (
+                        <div className="stockings">
+                            <div className="named">
+                                <h2 className="symbol">{this.state.userInput}</h2>
+                                <h2 className="stocked name" key={i}>{stock.name}</h2>
+                            </div>
+                            <h2 className="stocked price" key={i}>Price: {foundMarket.lastSalePrice}</h2>
+                            <h2 className="stocked bidsize" key={i}>Bid Size: {foundMarket.bidSize}</h2>
+                            <h2 className="stocked bidprice" key={i}>Bid Price: {foundMarket.bidPrice}</h2>
+                            <h2 className="stocked asksize" key={i}>Ask Size: {foundMarket.askSize}</h2>
+                            <h2 className="stocked askprice" key={i}>Ask Price: {foundMarket.askPrice}</h2>
+                            <h2 className="stocked volume" key={i}>Volume: {foundMarket.volume}</h2>
+                            <h2 className="stocked sector" key={i}>Sector: {foundMarket.sector}</h2>
+                        </div>
+                    );
                 })}
             </div>
-        )
-
+        );
     }
 }
-
-
 
 
 ReactDOM.render(
