@@ -22,17 +22,6 @@ class Stocks extends React.Component {
         })
     }
 
-    getSymbol = (e) => {
-        return fetch(`https://finnhub.io/api/v1/stock/symbol?exchange=US&token=${key}`)
-            .then(res => {
-                return res.json()
-            })
-            .then(data => {
-                data.push(this.state.urlSymbol)
-            }),
-            console.log(this.getSymbol)
-    }
-
     componentDidMount() {
 
         const urls = [
@@ -66,9 +55,13 @@ class Stocks extends React.Component {
             (market) => market.symbol === userInput
         );
 
+        const clock = new Date().toLocaleString()
+
+
         return (
             <div className="enterstock">
                 <div className="fields">
+                    <span className="clock">{clock}</span>
                     <h1 className="title">Enter Stock Symbol</h1>
                     <input type="text" className="symfields" name="symbolname" onChange={this.typeSymbol} />
                 </div>

@@ -13,6 +13,11 @@
     width: 100%;
 }
 
+.clock {
+    font-size: 1.3em;
+    -webkit-text-stroke-color: rgb(0, 0, 0);
+}
+
 .symbol {
     font-size: 2em;
     -webkit-text-fill-color: transparent;
