@@ -38,7 +38,6 @@ class Stocks extends React.Component {
                 this.setState({
                     stockSymbol: responses[0],
                     marketData: responses[1]
-
                 })
             })
 
