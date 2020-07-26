@@ -39,14 +39,15 @@ class Stocks extends React.Component {
                     stockSymbol: responses[0],
                     marketData: responses[1],
                     isLoaded: true
-                })
+                }),
+                    console.log(this.state.marketData)
             })
 
     }
 
 
     render() {
-        const { stockSymbol, userInput, marketData, isLoaded } = this.state;
+        const { stockSymbol, userInput, marketData } = this.state;
 
         const filteredSymbols = stockSymbol.filter(
             (sym) => sym.symbol === userInput
@@ -54,15 +55,15 @@ class Stocks extends React.Component {
         const foundMarket = marketData.find(
             (market) => market.symbol === userInput
         );
-
-        const clock = new Date().toLocaleString()
-
-        if (isLoaded) {
+        if (foundMarket === undefined) {
             return (<div>
-                The information that has been provided for the stocks has
-                timed out. Please return after 7:45am. Sorry for any inconvenience!
+                The database that has been provided for the stocks has
+                timed out. It should be up and running shortly. Sorry for any inconvenience!
             </div>)
         }
+        console.log(foundMarket)
+        const clock = new Date().toLocaleString()
+
         return (
             <div className="enterstock">
                 <div className="fields">
@@ -86,7 +87,7 @@ class Stocks extends React.Component {
                             <h2 className="stocked sector" key={i}>Sector: {foundMarket.sector}</h2>
                         </div>
                     );
-                })}
+                })},
             </div>
         );
     }
