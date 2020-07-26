@@ -60,7 +60,7 @@ class Stocks extends React.Component {
         if (isLoaded) {
             return (<div>
                 The information that has been provided for the stocks has
-                timed out. Please return after 7:45am. Sorry for an inconvenience!
+                timed out. Please return after 7:45am. Sorry for any inconvenience!
             </div>)
         }
         return (
