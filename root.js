@@ -37,7 +37,8 @@ class Stocks extends React.Component {
             }).then(responses => {
                 this.setState({
                     stockSymbol: responses[0],
-                    marketData: responses[1]
+                    marketData: responses[1],
+                    isLoaded: true
                 })
             })
 
@@ -45,7 +46,7 @@ class Stocks extends React.Component {
 
 
     render() {
-        const { stockSymbol, userInput, marketData } = this.state;
+        const { stockSymbol, userInput, marketData, isLoaded } = this.state;
 
         const filteredSymbols = stockSymbol.filter(
             (sym) => sym.symbol === userInput
@@ -56,7 +57,12 @@ class Stocks extends React.Component {
 
         const clock = new Date().toLocaleString()
 
-
+        if (isLoaded) {
+            return (<div>
+                The information that has been provided for the stocks has
+                timed out. Please return after 7:45am. Sorry for an inconvenience!
+            </div>)
+        }
         return (
             <div className="enterstock">
                 <div className="fields">
