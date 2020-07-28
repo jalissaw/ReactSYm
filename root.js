@@ -48,20 +48,21 @@ class Stocks extends React.Component {
 
     render() {
         const { stockSymbol, userInput, marketData, isLoaded } = this.state;
-
         const filteredSymbols = stockSymbol.filter(
             (sym) => sym.symbol === userInput
         );
         const foundMarket = marketData.find(
             (market) => market.symbol === userInput
         );
-        if (isLoaded) {
+        if (isLoaded === false) {
             return (<div>
                 The database that has been provided for the stocks has
                 timed out. It should be up and running shortly. Sorry for any inconvenience!
             </div>)
         }
+        console.log(this.state.isLoaded)
         console.log(isLoaded)
+
         const clock = new Date().toLocaleString()
 
         return (
