@@ -55,7 +55,7 @@ class Stocks extends React.Component {
         const foundMarket = marketData.find(
             (market) => market.symbol === userInput
         );
-        if (marketData === undefined) {
+        if (marketData === undefined || marketData === []) {
             return (<div>
                 The database that has been provided for the stocks has
                 timed out. It should be up and running shortly. Sorry for any inconvenience!
