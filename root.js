@@ -62,7 +62,7 @@ class Stocks extends React.Component {
                     timed out. It should be up and running shortly. Sorry for any inconvenience!
                 </div>)
         } else {
-            null
+            !isLoaded
         }
 
         console.log(this.state.isLoaded)
