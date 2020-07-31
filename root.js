@@ -55,7 +55,7 @@ class Stocks extends React.Component {
             (market) => market.symbol === userInput
         );
 
-        if (marketData === []) {
+        if (marketData === [] | marketData === null) {
             return (
                 <div>
                     The database that has been provided for the stocks has
