@@ -87,7 +87,7 @@ class Stocks extends React.Component {
                             <h2 className="stocked asksize" key={i}>Ask Size: {foundMarket.askSize}</h2>
                             <h2 className="stocked askprice" key={i}>Ask Price: {foundMarket.askPrice}</h2>
                             <h2 className="stocked volume" key={i}>Volume: {foundMarket.volume}</h2>
-                            <h2 className="stocked sector" key={i}>Sector: {foundMarket.sector}</h2>
+                            <h2 className="stocked sector" key={i}>Sector: {foundMarket.sector.join(' ')}</h2>
                         </div>
                     );
                 })},
