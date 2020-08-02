@@ -63,8 +63,6 @@ class Stocks extends React.Component {
                 </div>)
         }
 
-        console.log(marketData)
-
         const clock = new Date().toLocaleString()
 
         return (
