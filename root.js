@@ -39,8 +39,9 @@ class Stocks extends React.Component {
                     stockSymbol: responses[0],
                     marketData: responses[1],
                     isLoaded: true
-                }),
-                    console.log(this.state.marketData)
+                }).catch((err) => {
+                    console.log(err)
+                })
             })
 
     }
