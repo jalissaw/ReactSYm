@@ -17,8 +17,6 @@ class Stocks extends React.Component {
         this.setState({
             userInput: e.target.value.toUpperCase(),
 
-        }, (e) => {
-            console.log(this.state.userInput)
         })
     }
 
