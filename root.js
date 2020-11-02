@@ -1,28 +1,24 @@
 class Stocks extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
             userInput: '',
             stockSymbol: [],
-            marketData: [],
-            isLoaded: false
+            symbol1: []
         }
     }
 
-    typeSymbol = (e) => {
-        this.setState({
-            userInput: e.target.value.toUpperCase(),
 
-        })
-    }
+    typeSymbol = _.debounce((e) => {
+        this.setState({ userInput: e.target.value.toUpperCase() })
+    }, 1000)
+
 
     componentDidMount() {
-
         const urls = [
-            `https://api.iextrading.com/1.0/ref-data/symbols`,
-            `https://api.iextrading.com/1.0/tops`
+            `https://api.iextrading.com/1.0/ref-data/symbols`
         ]
-
 
         let requests = urls.map(url => fetch(url))
         Promise.all(requests)
@@ -30,61 +26,69 @@ class Stocks extends React.Component {
                 return Promise.all(responses.map(response => response.json()));
             }).then(responses => {
                 this.setState({
-                    stockSymbol: responses[0],
-                    marketData: responses[1],
-                    isLoaded: true
-                }).catch((err) => {
-                    console.log(err)
+                    stockSymbol: responses[0]
                 })
             })
+    }
+
+    componentDidUpdate(prevProps, prevState, snapShot) {
+        const { userInput } = this.state;
+
+        if (prevState.userInput !== userInput && userInput !== '') {
+            fetch(`https://finnhub.io/api/v1/quote?symbol=${userInput}&token=budo2rv48v6spq9og4p0`)
+                .then(res => res.json())
+                .then(responses => this.setState({
+                    symbol1: responses
+                }))
+        }
 
     }
 
 
     render() {
-        const { stockSymbol, userInput, marketData, isLoaded } = this.state;
+        const { stockSymbol, userInput, symbol1 } = this.state;
+        const Router = window.ReactRouterDOM.BrowserRouter;
+        const Route = window.ReactRouterDOM.Route;
+        const Link = window.ReactRouterDOM.Link;
+        const Prompt = window.ReactRouterDOM.Prompt;
+        const Switch = window.ReactRouterDOM.Switch;
+        const Redirect = window.ReactRouterDOM.Redirect;
+
         const filteredSymbols = stockSymbol.filter(
             (sym) => sym.symbol === userInput
-        );
-        const foundMarket = marketData.find(
-            (market) => market.symbol === userInput
-        );
-
-        if (marketData === [] | marketData === null) {
-            return (
-                <div>
-                    The database that has been provided for the stocks has
-                    timed out. It should be up and running shortly. Sorry for any inconvenience!
-                </div>)
-        }
+        )
 
         const clock = new Date().toLocaleString()
 
         return (
-            <div className="enterstock">
-                <div className="fields">
-                    <span className="clock">{clock}</span>
-                    <h1 className="title">Enter Stock Symbol</h1>
-                    <input type="text" className="symfields" name="symbolname" onChange={this.typeSymbol} />
-                </div>
-                {filteredSymbols.map((stock, i) => {
-                    return (
-                        <div className="stockings">
-                            <div className="named">
-                                <h2 className="symbol">{this.state.userInput}</h2>
-                                <h2 className=" name" key={i}>{stock.name}</h2>
+            <Router>
+                <div className="enterstock">
+                    <div className="fields">
+                        {/* <div className="profilelink">
+                            <button>Company Profile</button>
+                        </div> */}
+                        <span className="clock">{clock}</span>
+                        <h1 className="title">Enter Stock Symbol</h1>
+                        <input type="text" className="symfields" name="symbolname" onChange={(e) => { e.persist(); this.typeSymbol(e) }} />
+                    </div>
+                    {filteredSymbols.map((stock, i) => {
+                        return (
+                            <div className="stockings">
+                                <div className="named">
+                                    <h2 className="symbol">{this.state.userInput}</h2>
+                                    <h2 className=" name" key={i}>{stock.name}</h2>
+                                </div>
+                                {<h2 className="stocked price" key={i}>Price: {symbol1.c}</h2>}
+                                {<h2 className="stocked price" key={i}>Low: {symbol1.l}</h2>}
+                                {<h2 className="stocked price" key={i}>High: {symbol1.h}</h2>}
+                                {<h2 className="stocked price" key={i}>Open: {symbol1.o}</h2>}
+                                {<h2 className="stocked price" key={i}>Previous Close: {symbol1.pc}</h2>}
+                                {<h2 className="stocked price" key={i}>Range: {(symbol1.h - symbol1.l).toFixed(2)}</h2>}
                             </div>
-                            <h2 className="stocked price" key={i}>Price: {foundMarket.lastSalePrice}</h2>
-                            <h2 className="stocked bidsize" key={i}>Bid Size: {foundMarket.bidSize}</h2>
-                            <h2 className="stocked bidprice" key={i}>Bid Price: {foundMarket.bidPrice}</h2>
-                            <h2 className="stocked asksize" key={i}>Ask Size: {foundMarket.askSize}</h2>
-                            <h2 className="stocked askprice" key={i}>Ask Price: {foundMarket.askPrice}</h2>
-                            <h2 className="stocked volume" key={i}>Volume: {foundMarket.volume}</h2>
-                            <h2 className="stocked sector" key={i}>Sector: {foundMarket.sector}</h2>
-                        </div>
-                    );
-                })},
-            </div>
+                        );
+                    })},
+                </div>
+            </Router>
         );
     }
 }
